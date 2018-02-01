@@ -7,15 +7,54 @@
 //
 
 import UIKit
+import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    var defaults: UserDefaults?
+    var navigationController : UINavigationController?
 
-
+    
+//    override init() {
+//        FirebaseApp.configure()
+//    }
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        let frame = UIScreen.main.bounds
+        window = UIWindow(frame: frame)
+        
+        let user_id = defaults?.string(forKey: "user_id")
+        
+        if((user_id) != nil){
+            let vc = ChatsListViewController()
+            navigationController = UINavigationController(rootViewController: vc)
+        }
+        else{
+            let vc = InitialLandingViewController()
+            navigationController = UINavigationController(rootViewController: vc)
+        }
+        
+        
+        if let window = self.window{
+            window.rootViewController = navigationController
+            window.makeKeyAndVisible()
+            //navigationController.setNavigationBarHidden(true, animated: false)
+            
+            navigationController?.navigationBar.isTranslucent = false
+            navigationController?.navigationBar.backgroundColor = UIColor.black
+            navigationController?.navigationBar.tintColor = UIColor.white
+            
+            UINavigationBar.appearance().tintColor = UIColor.white
+            UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey.foregroundColor:UIColor.white]
+        }
+        
+        UIApplication.shared.statusBarStyle = .lightContent
+        
+        FirebaseApp.configure()
         return true
     }
 
