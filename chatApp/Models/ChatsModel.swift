@@ -14,9 +14,12 @@ class ChatsModel{
     
     func getAllChats(userID: String, completionHandler:@escaping (NSDictionary) -> ()) {
         
-        DBRef.fetchQueryData(table: "chats", column: "users/"+userID, values: true, completionHandler: {(responseDictionary) in
-            
-            completionHandler(responseDictionary)
+//        DBRef.fetchQueryData(table: "chats", column: "users/"+userID, values: true, completionHandler: {(responseDictionary) in
+//
+//            completionHandler(responseDictionary)
+//        })
+        
+        DBRef.ObserveFilteredData(table: "chats", column: "users/"+userID, values: true, completionHandler: {(responseDictionary) in completionHandler(responseDictionary)
         })
         
     }
@@ -25,20 +28,22 @@ class ChatsModel{
     func checkIfChatExists(userID: String, recepientID: String, completionHandler:@escaping (String) -> ()) {
         
         DBRef.fetchQueryData(table: "chats", column: "users/"+userID, values: true, completionHandler: {(responseDictionary) in
-            print("responseDictionary: \(responseDictionary)")
+           // print("responseDictionary: \(responseDictionary)")
             
             
             if let responseCode = responseDictionary["responseCode"]{
-                print("responseCode: \(responseCode)")
+               // print("responseCode: \(responseCode)")
                 if responseCode as! String == "1" || responseCode as! String == "0" {
-                    print("responseCode as! String: \(responseCode as! String)")
+                 //   print("responseCode as! String: \(responseCode as! String)")
                     completionHandler("")
                 }
             }
             else {
-                for (key,value) in responseDictionary{
+                let chatsDictionaryArray = responseDictionary.allValues
+                //print("chatsDictionaryArray: \(chatsDictionaryArray))")
+                for (key,value) in chatsDictionaryArray[0] as! NSDictionary{
                     let valueDict = value as! NSDictionary
-                    print("valueDict: \(valueDict)")
+                    //print("valueDict: \(valueDict)")
                     let usersArray = (valueDict["users"] as! NSDictionary).allKeys as NSArray
                     print("usersArray: \(usersArray)")
                     

@@ -57,16 +57,17 @@ class ChatsListViewController: UIViewController, UITableViewDelegate, UITableVie
     func loadChats(){
         
         ChatsModel().getAllChats(userID: userID!, completionHandler: {chatsDictionary in
-            let chatsDictionaryArray = chatsDictionary.allValues
+            let chatsDictionaryArray = chatsDictionary as NSDictionary
             print("chatsDictionaryArray: \(chatsDictionaryArray))")
-            for chatDictionary in chatsDictionaryArray[0] as! NSDictionary {
-                
+            for chatDictionary in chatsDictionaryArray {
+                print("chatDictionary: \(chatsDictionaryArray))")
                 if let chatValue = chatDictionary.value as? NSDictionary, let chatKey = chatDictionary.key as? AnyObject {
                     
                     let dataDict = [chatKey:chatValue] as NSMutableDictionary
                     self.chatsArray.append(dataDict)
                 }
             }
+            print("self.chatsArray: \(self.chatsArray))")
             self.chatsTableList?.reloadData()
         })
     }
@@ -87,7 +88,7 @@ class ChatsListViewController: UIViewController, UITableViewDelegate, UITableVie
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdendifier, for: indexPath as IndexPath) as! ChatsTableViewCell
         
         let rowDictionary = chatsArray[indexPath.row] as! NSMutableDictionary
-        
+        print("rowDictionary: \(rowDictionary))")
         let messageValues = rowDictionary.allValues
         let messageDictionary = messageValues[0] as! NSDictionary
         print("messageDictionary: \(messageDictionary)")

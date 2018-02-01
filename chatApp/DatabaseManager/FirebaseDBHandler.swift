@@ -102,15 +102,6 @@ public class FirebaseDBHandler
                 self.response = ["responseCode":"1", "responseMessage":"Data doesn't exist"]
             }
             
-            
-            
-//            if let dic = snapshot.value as? NSDictionary{
-//                self.response = dic
-//            }
-//            else{
-//                self.response = ["responseCode":"1", "responseMessage":"Data doesn't exist"]
-//            }
-            
             completionHandler(self.response!)
         })
         { (error) in
@@ -122,7 +113,6 @@ public class FirebaseDBHandler
     
     public func ObserveData(table: String, column: String, values: Any, completionHandler:@escaping (NSDictionary) -> ())
     {
-        //let dataQuery = databaseRef.child(table).queryOrdered(byChild: column).queryEqual(toValue: values)
         let dataQuery = databaseRef.child(table+"/"+column)
         dataQuery.observe(.childAdded, with: { (snapshot) -> Void in
             print("snapshot: \(snapshot)")
@@ -133,25 +123,39 @@ public class FirebaseDBHandler
             else{
                 self.response = ["responseCode":"1", "responseMessage":"Data doesn't exist"]
             }
-
+            completionHandler(self.response!)
             
-//            if snapshot.childrenCount > 1
-//            {
-//
-//                for childSnap in  snapshot.children.allObjects {
-//                    let snap = childSnap as! DataSnapshot
-//                    if let snapshotValue = snapshot.value as? NSDictionary, let snapVal = snapshotValue[snap.key] as? AnyObject {
-//
-//                        let dataDict = [snapVal:snapshotValue] as NSMutableDictionary
-//                        self.response = dataDict
-//                    }
-//                }
-//                print("all dataDict: \(self.response!)")
-//            }
-//            else
-//            {
-//                self.response = ["responseCode":"1", "responseMessage":"Data doesn't exist"]
-//            }
+        })
+        { (error) in
+            self.response = ["responseCode":"0", "responseMessage":error.localizedDescription]
+            completionHandler(self.response!)
+        }
+    }
+    
+    
+    public func ObserveFilteredData(table: String, column: String, values: Any, completionHandler:@escaping (NSDictionary) -> ())
+    {
+        let dataQuery = databaseRef.child(table).queryOrdered(byChild: column).queryEqual(toValue: values)
+        dataQuery.observe(.childAdded, with: { (snapshot) -> Void in
+            print("snapshot: \(snapshot)")
+            
+            if snapshot.childrenCount > 0
+            {
+                
+                for childSnap in  snapshot.children.allObjects {
+                    let snap = childSnap as! DataSnapshot
+                    if let snapshotValue = snapshot.value as? NSDictionary, let snapVal = snapshot.key as? AnyObject {
+                        
+                        let dataDict = [snapVal:snapshotValue] as NSMutableDictionary
+                        self.response = dataDict
+                    }
+                }
+                print("all dataDict: \(self.response!)")
+            }
+            else
+            {
+                self.response = ["responseCode":"1", "responseMessage":"Data doesn't exist"]
+            }
             
             completionHandler(self.response!)
         })
