@@ -33,75 +33,52 @@ class LoginView: UIView {
     func addCustomView() {
         
         let screenWidth = screenSize.width
-        let screenHeight = screenSize.height - 40
+        let screenHeight = screenSize.height
         let viewController = LoginViewController()
         
-        self.backgroundColor = UIColor.backGroundColor.themeColor
-        
-        scrollView = UIScrollView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight ))
-        scrollView.backgroundColor = UIColor.backGroundColor.themeColor
+        scrollView = UIScrollView(frame: CGRect(x : 0, y : 0, width : screenWidth, height : screenHeight))
+        scrollView.backgroundColor = UIColor.backGroundColor.plainColor
         self.addSubview(scrollView)
-       
         
-        let bodyContainer: UIView = UIView(frame: CGRect(x: (screenWidth - screenWidth*0.95)/2, y: screenHeight * 0.3, width:screenWidth*0.95, height: screenHeight*0.4 ) )
-        bodyContainer.backgroundColor = UIColor.white
-        bodyContainer.layer.cornerRadius = 4
-        scrollView.addSubview(bodyContainer)
+        let bodyContainerView: UIView = UIView(frame: CGRect(x : (screenWidth - screenWidth*0.95)/2, y : 5, width :screenWidth*0.95, height : screenHeight*0.7 ) )
+        bodyContainerView.backgroundColor = UIColor.clear
+        bodyContainerView.layer.cornerRadius = 4
+        scrollView.addSubview(bodyContainerView)
         
-        let emailText : UITextField = UITextField(frame : CGRect(x : 5, y : 10, width: bodyContainer.frame.size.width - 10, height : 40))
-        emailText.placeholder = " Enter email"
-        emailText.backgroundColor = UIColor.white
-        emailText.textColor = UIColor.black
-        emailText.layer.cornerRadius = 4
-        emailText.keyboardType = UIKeyboardType.emailAddress
-        emailText.textAlignment = NSTextAlignment.left
-        emailText.tag = 1
-        emailText.layer.borderColor = UIColor.lightGray.cgColor
-        emailText.layer.borderWidth = 1
-        emailText.delegate = viewController
-        emailText.returnKeyType = UIReturnKeyType.done
-        bodyContainer.addSubview(emailText)
+        let phoneNumberLabel : UILabel = UILabel(frame : CGRect(x : 5, y : 10, width : bodyContainerView.frame.size.width, height : 25))
+        phoneNumberLabel.text = "Enter your phone number"
+        phoneNumberLabel.textColor = UIColor.formLabelsColor.defaultLabelColor
+        phoneNumberLabel.font = UIFont.boldSystemFont(ofSize: 16)
+        phoneNumberLabel.textAlignment = NSTextAlignment.left
+        bodyContainerView.addSubview(phoneNumberLabel)
         
-        
-        let passwordText : UITextField = UITextField(frame : CGRect(x : 5, y : emailText.frame.origin.y + emailText.frame.size.height + 15, width: bodyContainer.frame.size.width - 10, height : 40))
-        passwordText.placeholder = " Enter password"
-        passwordText.backgroundColor = UIColor.white
-        passwordText.textColor = UIColor.black
-        passwordText.layer.cornerRadius = 4
-        passwordText.keyboardType = UIKeyboardType.default
-        passwordText.textAlignment = NSTextAlignment.left
-        passwordText.isSecureTextEntry = true
-        passwordText.tag = 2
-        passwordText.layer.borderColor = UIColor.lightGray.cgColor
-        passwordText.layer.borderWidth = 1
-        passwordText.delegate = viewController
-        passwordText.returnKeyType = UIReturnKeyType.done
-        bodyContainer.addSubview(passwordText)
+        let phoneNumberText : UITextField = UITextField(frame : CGRect(x : 5, y : phoneNumberLabel.frame.size.height + phoneNumberLabel.frame.origin.y + 10, width: bodyContainerView.frame.size.width - 10, height : 40))
+        phoneNumberText.placeholder = " Enter phone number"
+        phoneNumberText.text = "+254"
+        phoneNumberText.backgroundColor = UIColor.clear
+        phoneNumberText.textColor = UIColor.black
+        phoneNumberText.layer.cornerRadius = 4
+        phoneNumberText.textAlignment = NSTextAlignment.left
+        phoneNumberText.tag = 1
+        phoneNumberText.layer.borderColor = UIColor.lightGray.cgColor
+        phoneNumberText.layer.borderWidth = 1
+        phoneNumberText.keyboardType = .numbersAndPunctuation
+        bodyContainerView.addSubview(phoneNumberText)
         
         
-        let loginButton : UIButton = UIButton(frame : CGRect(x : 5, y : passwordText.frame.size.height + passwordText.frame.origin.y + 15, width: bodyContainer.frame.size.width - 10, height : 40))
-        loginButton.backgroundColor = UIColor.black
-        loginButton.setTitle("LOGIN", for: UIControlState.normal)
-        loginButton.setTitleColor(UIColor.white, for: UIControlState.normal)
-        loginButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-        loginButton.titleLabel?.textAlignment = NSTextAlignment.center
-        loginButton.clipsToBounds = true
-        loginButton.isEnabled = true
-        loginButton.layer.cornerRadius = 8
-        loginButton.tag = 4
-        bodyContainer.addSubview(loginButton)
         
-        
-        let forgotButton : UIButton = UIButton(frame : CGRect(x : 0, y : loginButton.frame.size.height + loginButton.frame.origin.y + 10, width: (bodyContainer.frame.size.width * 0.5)  , height : 30))
-        forgotButton.backgroundColor = UIColor.clear
-        forgotButton.setTitle("Forgot password?", for: UIControlState.normal)
-        forgotButton.setTitleColor(UIColor.black, for: UIControlState.normal)
-        forgotButton.titleLabel?.font = UIFont.systemFont(ofSize: 13)
-        forgotButton.titleLabel?.textAlignment = NSTextAlignment.center
-        forgotButton.clipsToBounds = true
-        forgotButton.isEnabled = true
-        forgotButton.tag = 6
-        bodyContainer.addSubview(forgotButton)
+        let saveButton : UIButton = UIButton(frame : CGRect(x : 0, y : phoneNumberText.frame.size.height + phoneNumberText.frame.origin.y + 15, width: bodyContainerView.frame.size.width, height : 40))
+        saveButton.backgroundColor = UIColor.buttonColor.defaultButtonColor
+        saveButton.setTitle("NEXT", for: UIControlState.normal)
+        saveButton.setTitleColor(UIColor.white, for: UIControlState.normal)
+        saveButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        saveButton.titleLabel?.textAlignment = NSTextAlignment.center
+        saveButton.clipsToBounds = true
+        saveButton.isEnabled = true
+        saveButton.layer.cornerRadius = 4
+        saveButton.tag = 2
+        saveButton.addTarget(viewController, action:#selector(viewController.buttonListener(sender:)), for: UIControlEvents.touchUpInside)
+        bodyContainerView.addSubview(saveButton)
         
         
     }

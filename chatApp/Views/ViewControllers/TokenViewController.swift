@@ -19,7 +19,8 @@ class TokenViewController: UIViewController, UITextFieldDelegate {
     var lastName: String = ""
     var phoneNumber: String = ""
     var email: String = ""
-    var password: String = ""
+    var verificationID: String? 
+    var authenticationType: String?
     
     override func loadView() {
         super.loadView()
@@ -94,15 +95,14 @@ class TokenViewController: UIViewController, UITextFieldDelegate {
             
             if(verificationCode?.isEmpty)!{
                 
-                let alert = UIAlertController.init(title: "", message: "Enter your first name", preferredStyle: UIAlertControllerStyle.alert)
+                let alert = UIAlertController.init(title: "", message: "Enter token sent to your phone number", preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
                 navigationController?.present(alert, animated: true, completion: nil)
                 
             }
             else
             {
-                let verificationID = UserDefaults.standard.string(forKey: "authVerificationID")
-                
+               
                 let credential = PhoneAuthProvider.provider().credential(
                     withVerificationID: verificationID!,
                     verificationCode: verificationCode!)
@@ -115,25 +115,35 @@ class TokenViewController: UIViewController, UITextFieldDelegate {
                     }
                     else{
                         // User is signed in
-                        print("User\(String(describing: user?.phoneNumber))")
+                        print("User: \(String(describing: user?.phoneNumber))")
                         UserDefaults.standard.set(user?.phoneNumber, forKey: "verifiedUser")
                         UserDefaults.standard.set(user?.uid, forKey: "verifiedUserID")
                         
-                        let userData = ["firstName":self.firstName,"lastName":self.lastName,"phoneNumber":self.phoneNumber,"email":self.email,"uid":user?.uid,"credentials":self.email+"_"+self.password]
+                        if self.authenticationType == "Login"
+                        {
+                            let controller: ChatsListViewController = ChatsListViewController()
+                            self.navigationController?.pushViewController(controller, animated: true)
+                        }
+                        else
+                        {
+                            let userData = ["firstName":self.firstName,"lastName":self.lastName,"phoneNumber":self.phoneNumber,"email":self.email,"uid":user?.uid,"credentials":self.email]
+                            
+                            FirebaseDBHandler.sharedInstance.addNewUser(table: "users", uniqueID: (user?.phoneNumber)!, values: userData as NSDictionary, completionHandler: {response in
+                                if response == 1
+                                {
+                                    UserDefaults.standard.set(self.firstName+" "+self.lastName, forKey: "senderName")
+                                    let controller: ChatsListViewController = ChatsListViewController()
+                                    self.navigationController?.pushViewController(controller, animated: true)
+                                }
+                                else
+                                {
+                                    let alert = UIAlertController.init(title: "", message: "An error occurred, please try again later.", preferredStyle: UIAlertControllerStyle.alert)
+                                    alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
+                                    self.navigationController?.present(alert, animated: true, completion: nil)
+                                }
+                            })
+                        }
                         
-                        FirebaseDBHandler.sharedInstance.addNewUser(table: "users", uniqueID: (user?.phoneNumber)!, values: userData as NSDictionary, completionHandler: {response in
-                            if response == 1
-                            {
-                                let controller: LoginViewController = LoginViewController()
-                                self.navigationController?.pushViewController(controller, animated: true)
-                            }
-                            else
-                            {
-                                let alert = UIAlertController.init(title: "", message: "An error occurred, please try again later.", preferredStyle: UIAlertControllerStyle.alert)
-                                alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
-                                self.navigationController?.present(alert, animated: true, completion: nil)
-                            }
-                        })
                     }
                 }
                 

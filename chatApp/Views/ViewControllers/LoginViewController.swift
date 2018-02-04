@@ -8,15 +8,12 @@
 
 import UIKit
 import FirebaseAuth
-import FirebaseDatabase
 
 class LoginViewController: UIViewController, UITextFieldDelegate {
-
+    
     var loginButtonRef : UIButton? = nil
-    var forgotPasswordButtonRef : UIButton? = nil
     var tapper : UITapGestureRecognizer? = nil
-    var emailText : UITextField? = nil
-    var passwordText : UITextField? = nil
+    var phoneNumberText : UITextField? = nil
     var defaults: UserDefaults?
     
     override func loadView() {
@@ -34,36 +31,29 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         let loginView = LoginView(frame: CGRect.zero)
         self.view = loginView
         
-        emailText = self.view.viewWithTag(1) as! UITextField?
-        passwordText = self.view.viewWithTag(2) as! UITextField?
-        
-        loginButtonRef = self.view.viewWithTag(4) as! UIButton?
-        loginButtonRef!.addTarget(self, action:#selector(buttonListener(sender:)), for: UIControlEvents.touchUpInside)
-        
-        forgotPasswordButtonRef = self.view.viewWithTag(6) as! UIButton?
-        forgotPasswordButtonRef!.addTarget(self, action:#selector(buttonListener(sender:)), for: UIControlEvents.touchUpInside)
+        phoneNumberText = self.view.viewWithTag(1) as! UITextField?
         
         tapper = UITapGestureRecognizer(target: self, action: #selector(handleSingleTap(sender:)))
         tapper?.cancelsTouchesInView = false
         self.view.addGestureRecognizer(tapper!)
         
         
-//        let user = UserModel()
-//        let storedUser = UserDefaults.standard.string(forKey: "senderNameTest")
-//        print("Read user:\(storedUser ?? "Failed to get stored user")")
+        //        let user = UserModel()
+        //        let storedUser = UserDefaults.standard.string(forKey: "senderNameTest")
+        //        print("Read user:\(storedUser ?? "Failed to get stored user")")
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-
+    
     // MARK: - UITextFieldDelegate methods
     func textFieldShouldReturn(_ textField: UITextField) -> Bool { 
         textField.resignFirstResponder()
@@ -77,7 +67,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.view.endEditing(true)
     }
     
-   
+    
     // MARK: - Show message in UIAlertViewController
     func showMessagePrompt(messageToShow: String)
     {
@@ -92,61 +82,57 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         
         let btnsendtag: UIButton = sender
         
-        if btnsendtag.tag == 4 {
+        if btnsendtag.tag == 2 {
             // login Button clicked
-            let emailString = emailText?.text
-            let passwordString = passwordText?.text
+            let phoneString = phoneNumberText?.text
             
-            if(emailString?.isEmpty)!
+            if(phoneString?.isEmpty)!
             {
                 
-                let alert = UIAlertController.init(title: "", message: "Enter your email address.", preferredStyle: UIAlertControllerStyle.alert)
-                alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
-                navigationController?.present(alert, animated: true, completion: nil)
-                
-            }
-            else if (passwordString?.isEmpty)!
-            {
-                
-                let alert = UIAlertController.init(title: "", message: "Enter your password.", preferredStyle: UIAlertControllerStyle.alert)
+                let alert = UIAlertController.init(title: "", message: "Enter your phone number.", preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
                 navigationController?.present(alert, animated: true, completion: nil)
                 
             }
             else
             {
-                FirebaseDBHandler.sharedInstance.attempToLogin(credentials: emailString!+"_"+passwordString!, completionHandler: {isValidUser in
-                    
-                    if isValidUser == 1{
-                        //set sender display name
-                        let senderName = UserDefaults.standard.string(forKey: "senderName")
-                        print("READ senderName: \(String(describing: senderName))")
-
-                        let chatController: ChatViewController = ChatViewController() as ChatViewController
-                        chatController.senderDisplayName = senderName
+                UserModel().checkIfUserExists(msisdn: phoneString!, completionHandler: {responseDictionary in
+                    print("responseDictionary2: \(responseDictionary)")
+                    if let responseMsisdn = responseDictionary["phoneNumber"]{
+                        //user already registered. Authenticate phone number
+                        print("user exists")
                         
-                        let controller: ChatsListViewController = ChatsListViewController()
-                        self.navigationController?.pushViewController(controller, animated: true)
-                    }
-                    else  if isValidUser == 2{
+                        let userName = (responseDictionary["firstName"] as! String)+" "+(responseDictionary["lastName"] as! String)
                         
-                        self.showMessagePrompt(messageToShow: "Invalid username / password")
+                        PhoneAuthProvider.provider().verifyPhoneNumber(phoneString!, uiDelegate: nil) { (verificationID, error) in
+                            if let error = error {
+                                self.showMessagePrompt(messageToShow: error.localizedDescription)
+                                return
+                            }
+                            // Sign in using the verificationID and the code sent to the user
+                            UserDefaults.standard.set(verificationID, forKey: "authVerificationID")
+                            UserDefaults.standard.set(userName, forKey: "senderName")
+                            
+                            print("user verificationID: \(String(describing: verificationID))")
+                            let controller: TokenViewController = TokenViewController()
+                            controller.authenticationType = "Login"
+                            controller.phoneNumber = responseMsisdn as! String
+                            controller.verificationID = verificationID
+                            self.navigationController?.pushViewController(controller, animated: true)
+                        }
                     }
                     else{
-                        
-                        self.showMessagePrompt(messageToShow: "An error occured please try again later")
+                        //user is not registered. Go to registration view
+                        print("new user")
+                        let controller: SignUpViewController = SignUpViewController()
+                        self.navigationController?.pushViewController(controller, animated: true)
                     }
                 })
                 
             }
-           
-        }
-        else if btnsendtag.tag == 6 {
-            //MARK - forgot password Button clicked
             
-           
         }
         
     }
-
+    
 }

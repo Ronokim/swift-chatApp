@@ -37,7 +37,19 @@ class ChatsTableViewCell: UITableViewCell {
         icon.clipsToBounds = true
         icon.tintColor = .black
         
-        nameLabel.frame = CGRect(x: icon.frame.origin.x + icon.frame.size.width + 15, y: 10, width: self.bounds.width - 10, height: 30)
+        
+        //msisdnLabel.frame = CGRect(x: icon.frame.origin.x + icon.frame.size.width + 15, y: nameLabel.frame.size.height + nameLabel.frame.origin.y + 5, width: self.bounds.width - 10, height: 30)
+        msisdnLabel.frame = CGRect(x: icon.frame.origin.x + icon.frame.size.width + 15, y: 10, width: self.bounds.width - 10, height: 30)
+        msisdnLabel.textColor = UIColor.black
+        msisdnLabel.backgroundColor = UIColor.clear
+        msisdnLabel.textAlignment = NSTextAlignment.left
+        msisdnLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
+        msisdnLabel.numberOfLines = 0
+        msisdnLabel.font = UIFont.systemFont(ofSize: 15, weight: UIFont.Weight(rawValue: 0))
+        
+        
+        //nameLabel.frame = CGRect(x: icon.frame.origin.x + icon.frame.size.width + 15, y: 10, width: self.bounds.width - 10, height: 30)
+        nameLabel.frame = CGRect(x: icon.frame.origin.x + icon.frame.size.width + 15, y: msisdnLabel.frame.size.height + msisdnLabel.frame.origin.y + 5, width: self.bounds.width - 20, height: 30)
         nameLabel.textColor = UIColor.black
         nameLabel.backgroundColor = UIColor.clear
         nameLabel.textAlignment = NSTextAlignment.left
@@ -45,13 +57,7 @@ class ChatsTableViewCell: UITableViewCell {
         nameLabel.numberOfLines = 0
         nameLabel.font = UIFont.systemFont(ofSize: 15, weight: UIFont.Weight(rawValue: 0))
         
-        msisdnLabel.frame = CGRect(x: icon.frame.origin.x + icon.frame.size.width + 15, y: nameLabel.frame.size.height + nameLabel.frame.origin.y + 5, width: self.bounds.width - 10, height: 30)
-        msisdnLabel.textColor = UIColor.black
-        msisdnLabel.backgroundColor = UIColor.clear
-        msisdnLabel.textAlignment = NSTextAlignment.left
-        msisdnLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
-        msisdnLabel.numberOfLines = 0
-        msisdnLabel.font = UIFont.systemFont(ofSize: 15, weight: UIFont.Weight(rawValue: 0))
+        
         
     }
     

@@ -13,13 +13,7 @@ import Firebase
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    var defaults: UserDefaults?
     var navigationController : UINavigationController?
-
-    
-//    override init() {
-//        FirebaseApp.configure()
-//    }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -27,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let frame = UIScreen.main.bounds
         window = UIWindow(frame: frame)
         
-        let user_id = defaults?.string(forKey: "user_id")
+        let user_id = UserDefaults.standard.string(forKey: "verifiedUser")
         
         if((user_id) != nil){
             let vc = ChatsListViewController()

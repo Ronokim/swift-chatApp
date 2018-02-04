@@ -36,10 +36,12 @@ public class FirebaseDBHandler
     
     public func addNewRecordWithAutoID(table: String, values: NSDictionary, completionHandler:@escaping (Bool) -> ())
     {
-        self.databaseRef.child(table).childByAutoId().setValue(values){ (error, ref) -> Void in
+        databaseRef.child(table).childByAutoId().setValue(values){ (error, ref) -> Void in
             if (error != nil) {
+                print("message NOT saved returning false")
                 completionHandler(false)
             } else {
+                 print("message saved returning true")
                 completionHandler(true)
             }
         }
@@ -48,8 +50,16 @@ public class FirebaseDBHandler
     
     public func fetchData(table: String, completionHandler:@escaping (NSDictionary) -> ())
     {
+        print("fetchData")
         databaseRef.child(table).observe(.value, with: { snapshot in
-            self.response = snapshot.value as? NSDictionary
+        //databaseRef.child(table).observeSingleEvent(of: .value, with: { (snapshot) in
+            if let dic = snapshot.value as? NSDictionary{
+                self.response = dic
+            }
+            else{
+                self.response = ["responseCode":"1", "responseMessage":"Data doesn't exist"]
+            }
+            
             completionHandler(self.response!)
         })
         { (error) in
@@ -59,8 +69,21 @@ public class FirebaseDBHandler
     }
     
     
+    public func updateFunction(referenceToUpdate: String, newValues: [AnyHashable:Any], completionHandler:@escaping (Bool) -> ())
+    {
+        databaseRef.child(referenceToUpdate).updateChildValues(newValues){ (error, ref) -> Void in
+            if (error != nil) {
+                completionHandler(false)
+            } else {
+                completionHandler(true)
+            }
+        }
+    }
+
+    
     public func fetchFilteredData(table: String, column: String, values: Any, completionHandler:@escaping (NSDictionary) -> ())
     {
+        print("fetchFilteredData")
         databaseRef.child(table).queryOrdered(byChild: column).observeSingleEvent(of: .value, with: { (snapshot) in
             print("snapshot: \(snapshot)")
             if let dic = snapshot.value as? NSDictionary{
@@ -81,8 +104,9 @@ public class FirebaseDBHandler
     
     public func fetchQueryData(table: String, column: String, values: Any, completionHandler:@escaping (NSDictionary) -> ())
     {
+        print("fetchQueryData")
         databaseRef.child(table).queryOrdered(byChild: column).queryEqual(toValue: values).observeSingleEvent(of: .value, with: { (snapshot) in
-            print("snapshot: \(snapshot)")
+            print("fetchQueryData snapshot: \(snapshot)")
             
             if snapshot.childrenCount > 0
             {
@@ -113,6 +137,7 @@ public class FirebaseDBHandler
     
     public func ObserveData(table: String, column: String, values: Any, completionHandler:@escaping (NSDictionary) -> ())
     {
+        print("ObserveData")
         let dataQuery = databaseRef.child(table+"/"+column)
         dataQuery.observe(.childAdded, with: { (snapshot) -> Void in
             print("snapshot: \(snapshot)")
@@ -135,22 +160,23 @@ public class FirebaseDBHandler
     
     public func ObserveFilteredData(table: String, column: String, values: Any, completionHandler:@escaping (NSDictionary) -> ())
     {
+        print("ObserveFilteredData")
         let dataQuery = databaseRef.child(table).queryOrdered(byChild: column).queryEqual(toValue: values)
         dataQuery.observe(.childAdded, with: { (snapshot) -> Void in
-            print("snapshot: \(snapshot)")
+            print("\(table) - snapshot: \(snapshot)")
             
             if snapshot.childrenCount > 0
             {
-                
+               
                 for childSnap in  snapshot.children.allObjects {
                     let snap = childSnap as! DataSnapshot
                     if let snapshotValue = snapshot.value as? NSDictionary, let snapVal = snapshot.key as? AnyObject {
-                        
+
                         let dataDict = [snapVal:snapshotValue] as NSMutableDictionary
                         self.response = dataDict
                     }
                 }
-                print("all dataDict: \(self.response!)")
+           
             }
             else
             {
@@ -158,6 +184,33 @@ public class FirebaseDBHandler
             }
             
             completionHandler(self.response!)
+        })
+        { (error) in
+            self.response = ["responseCode":"0", "responseMessage":error.localizedDescription]
+            completionHandler(self.response!)
+        }
+    }
+    
+    
+    public func ObserveDataChanged(table: String, column: String, completionHandler:@escaping (NSDictionary) -> ())
+    {
+        print("ObserveDataChanged")
+        let dataQuery = databaseRef.child(table+"/"+column)
+        dataQuery.observe(.childChanged, with: { (snapshot) -> Void in
+            print("snapshot: \(snapshot)")
+            print("snapshot.value: \(String(describing: snapshot.value))")
+            
+            if ( snapshot.value is NSNull )
+            {
+                self.response = ["responseCode":"1", "responseMessage":"Data doesn't exist"]
+            } else
+            {
+                let dataDict = [snapshot.key:snapshot.value!] as NSMutableDictionary
+                self.response = dataDict
+            }
+            
+            completionHandler(self.response!)
+            
         })
         { (error) in
             self.response = ["responseCode":"0", "responseMessage":error.localizedDescription]

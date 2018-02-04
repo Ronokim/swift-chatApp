@@ -131,27 +131,6 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
                 navigationController?.present(alert, animated: true, completion: nil)
                 
             }
-            else if (passwordString?.isEmpty)!{
-                
-                let alert = UIAlertController.init(title: "", message: "Enter your password.", preferredStyle: UIAlertControllerStyle.alert)
-                alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
-                navigationController?.present(alert, animated: true, completion: nil)
-                
-            }
-            else if (confirmPasswordString?.isEmpty)!{
-                
-                let alert = UIAlertController.init(title: "", message: "Re-enter your password to confirm.", preferredStyle: UIAlertControllerStyle.alert)
-                alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
-                navigationController?.present(alert, animated: true, completion: nil)
-                
-            }
-            else if(confirmPasswordString != passwordString){
-                
-                let alert = UIAlertController.init(title: "", message: "Passwords do not match.", preferredStyle: UIAlertControllerStyle.alert)
-                alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
-                navigationController?.present(alert, animated: true, completion: nil)
-                
-            }
             else
             {
                 PhoneAuthProvider.provider().verifyPhoneNumber(msisdnString!, uiDelegate: nil) { (verificationID, error) in
@@ -161,16 +140,14 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
                     }
                     // Sign in using the verificationID and the code sent to the user
                     UserDefaults.standard.set(verificationID, forKey: "authVerificationID")
-                    
-                    let user = UserObject()
-                    user.setUser(firstname: firtNameString!, lastname: lastNameString!, msisdn: msisdnString!, email: emailString!, password: passwordString!)
                    
                     let controller: TokenViewController = TokenViewController()
                     controller.firstName = firtNameString!
                     controller.lastName = lastNameString!
                     controller.phoneNumber = msisdnString!
                     controller.email = emailString!
-                    controller.password = passwordString!
+                    controller.authenticationType = "Registration"
+                    controller.verificationID = verificationID
                     self.navigationController?.pushViewController(controller, animated: true)
                 }
             }

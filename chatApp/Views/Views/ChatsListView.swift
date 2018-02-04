@@ -41,6 +41,8 @@ class ChatsListView: UIView {
         newContactButton.backgroundColor = UIColor.buttonColor.defaultButtonColor
         newContactButton.layer.cornerRadius = 30
         newContactButton.addTarget(viewController, action:#selector(viewController.buttonListener(sender:)), for: UIControlEvents.touchUpInside)
+        newContactButton.setImage(UIImage(named: "ic_add.png"), for: .normal)
         self.addSubview(newContactButton)
+        
     }
 }

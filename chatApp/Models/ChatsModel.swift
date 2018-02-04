@@ -14,12 +14,22 @@ class ChatsModel{
     
     func getAllChats(userID: String, completionHandler:@escaping (NSDictionary) -> ()) {
         
-//        DBRef.fetchQueryData(table: "chats", column: "users/"+userID, values: true, completionHandler: {(responseDictionary) in
-//
-//            completionHandler(responseDictionary)
-//        })
-        
         DBRef.ObserveFilteredData(table: "chats", column: "users/"+userID, values: true, completionHandler: {(responseDictionary) in completionHandler(responseDictionary)
+        })
+        
+    }
+    
+    func dumpAllChats(userID: String, completionHandler:@escaping (NSDictionary) -> ())  {
+                DBRef.fetchQueryData(table: "chats", column: "users/"+userID, values: true, completionHandler: {(responseDictionary) in
+        
+                    completionHandler(responseDictionary)
+                })
+    }
+    
+    
+    func observeLastMessageChange(chatID: String, completionHandler:@escaping (NSDictionary) -> ()) {
+        
+        DBRef.ObserveDataChanged(table: "chats", column: chatID, completionHandler: {(responseDictionary) in completionHandler(responseDictionary)
         })
         
     }
@@ -28,17 +38,18 @@ class ChatsModel{
     func checkIfChatExists(userID: String, recepientID: String, completionHandler:@escaping (String) -> ()) {
         
         DBRef.fetchQueryData(table: "chats", column: "users/"+userID, values: true, completionHandler: {(responseDictionary) in
-           // print("responseDictionary: \(responseDictionary)")
+             print("responseDictionary: \(responseDictionary)")
             
             
             if let responseCode = responseDictionary["responseCode"]{
-               // print("responseCode: \(responseCode)")
+                print("responseCode: \(responseCode)")
                 if responseCode as! String == "1" || responseCode as! String == "0" {
-                 //   print("responseCode as! String: \(responseCode as! String)")
+                    //   print("responseCode as! String: \(responseCode as! String)")
                     completionHandler("")
                 }
             }
             else {
+                var chatID: String = ""
                 let chatsDictionaryArray = responseDictionary.allValues
                 //print("chatsDictionaryArray: \(chatsDictionaryArray))")
                 for (key,value) in chatsDictionaryArray[0] as! NSDictionary{
@@ -47,20 +58,22 @@ class ChatsModel{
                     let usersArray = (valueDict["users"] as! NSDictionary).allKeys as NSArray
                     print("usersArray: \(usersArray)")
                     
-                    if usersArray.contains(recepientID){
+                    if usersArray.contains(recepientID)
+                    {
                         print("chat exists for key: \(key)")
-                        completionHandler(key as! String)
+                        chatID = key as! String
                     }
-                    else{
+                    else
+                    {
                         print("chat does not exists for receipient: \(recepientID)")
-                        completionHandler("")
+                        //completionHandler("")
                     }
                 }
+                completionHandler(chatID)
             }
         })
         
     }
-    
     
     func createNewChat(userID: String, recepientID: String, lastMessage: String, completionHandler:@escaping (Bool) -> ()) {
         
@@ -74,8 +87,11 @@ class ChatsModel{
     }
     
     
-    func updateLastMessage(chatID: String, lastMessage: String) -> Bool {
+    func updateLastMessage(chatID: String, lastMessage: String, completionHandler:@escaping (Bool) -> ()) {
         
-        return false
+        DBRef.updateFunction(referenceToUpdate: "chats/"+chatID, newValues: ["lastMessage":lastMessage], completionHandler: {response in
+            completionHandler(response)
+        })
+   
     }
 }

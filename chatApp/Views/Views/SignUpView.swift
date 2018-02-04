@@ -96,11 +96,12 @@ class SignUpView: UIView {
         msisdnText.backgroundColor = UIColor.clear
         msisdnText.textColor = UIColor.black
         msisdnText.layer.cornerRadius = 4
-        msisdnText.keyboardType = UIKeyboardType.emailAddress
+        msisdnText.keyboardType = .numbersAndPunctuation
         msisdnText.textAlignment = NSTextAlignment.left
         msisdnText.tag = 7
         msisdnText.layer.borderColor = UIColor.lightGray.cgColor
         msisdnText.layer.borderWidth = 1
+        msisdnText.text = "+254"
         bodyContainerView.addSubview(msisdnText)
         
         
@@ -124,47 +125,7 @@ class SignUpView: UIView {
         bodyContainerView.addSubview(emailNameText)
         
         
-        let passwordLabel : UILabel = UILabel(frame : CGRect(x : 5, y : emailNameText.frame.size.height + emailNameText.frame.origin.y + 5, width : bodyContainerView.frame.size.width - 10, height : 25))
-        passwordLabel.text = "Create password"
-        passwordLabel.textColor = UIColor.formLabelsColor.defaultLabelColor
-        passwordLabel.font = UIFont.boldSystemFont(ofSize: 16)
-        passwordLabel.textAlignment = NSTextAlignment.left
-        bodyContainerView.addSubview(passwordLabel)
-        
-        let passwordText : UITextField = UITextField(frame : CGRect(x : 5, y : passwordLabel.frame.size.height + passwordLabel.frame.origin.y + 5, width: bodyContainerView.frame.size.width - 10, height : 40))
-        passwordText.placeholder = " Enter password"
-        passwordText.backgroundColor = UIColor.clear
-        passwordText.textColor = UIColor.black
-        passwordText.layer.cornerRadius = 4
-        passwordText.isSecureTextEntry = true
-        passwordText.textAlignment = NSTextAlignment.left
-        passwordText.tag = 4
-        passwordText.layer.borderColor = UIColor.lightGray.cgColor
-        passwordText.layer.borderWidth = 1
-        bodyContainerView.addSubview(passwordText)
-        
-        
-        let confirmPasswordLabel : UILabel = UILabel(frame : CGRect(x : 5, y : passwordText.frame.size.height + passwordText.frame.origin.y + 5, width : bodyContainerView.frame.size.width - 10, height : 25))
-        confirmPasswordLabel.text = "Confirm password"
-        confirmPasswordLabel.textColor = UIColor.formLabelsColor.defaultLabelColor
-        confirmPasswordLabel.font = UIFont.boldSystemFont(ofSize: 16)
-        confirmPasswordLabel.textAlignment = NSTextAlignment.left
-        bodyContainerView.addSubview(confirmPasswordLabel)
-        
-        let confirmPasswordText : UITextField = UITextField(frame : CGRect(x : 5, y : confirmPasswordLabel.frame.size.height + confirmPasswordLabel.frame.origin.y + 5, width: bodyContainerView.frame.size.width - 10, height : 40))
-        confirmPasswordText.placeholder = " Re-enter password"
-        confirmPasswordText.backgroundColor = UIColor.clear
-        confirmPasswordText.textColor = UIColor.black
-        confirmPasswordText.layer.cornerRadius = 4
-        confirmPasswordText.isSecureTextEntry = true
-        confirmPasswordText.textAlignment = NSTextAlignment.left
-        confirmPasswordText.tag = 5
-        confirmPasswordText.layer.borderColor = UIColor.lightGray.cgColor
-        confirmPasswordText.layer.borderWidth = 1
-        bodyContainerView.addSubview(confirmPasswordText)
-        
-        
-        let saveButton : UIButton = UIButton(frame : CGRect(x : 0, y : confirmPasswordText.frame.size.height + confirmPasswordText.frame.origin.y + 15, width: bodyContainerView.frame.size.width, height : 40))
+        let saveButton : UIButton = UIButton(frame : CGRect(x : 0, y : emailNameText.frame.size.height + emailNameText.frame.origin.y + 15, width: bodyContainerView.frame.size.width, height : 40))
         saveButton.backgroundColor = UIColor.buttonColor.defaultButtonColor
         saveButton.setTitle("SIGN UP", for: UIControlState.normal)
         saveButton.setTitleColor(UIColor.white, for: UIControlState.normal)

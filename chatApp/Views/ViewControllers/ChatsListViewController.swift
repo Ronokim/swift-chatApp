@@ -44,9 +44,17 @@ class ChatsListViewController: UIViewController, UITableViewDelegate, UITableVie
         chatsTableList?.dataSource = self
         userID = UserDefaults.standard.string(forKey: "verifiedUser")
         print("UserID: \(String(describing: userID))")
-        self.loadChats()
+        //self.loadChats()
     }
 
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        
+        self.loadChats()
+    }
+    
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -55,23 +63,69 @@ class ChatsListViewController: UIViewController, UITableViewDelegate, UITableVie
     
     //fetch all chats user is in
     func loadChats(){
-        
+        self.chatsArray.removeAll()
         ChatsModel().getAllChats(userID: userID!, completionHandler: {chatsDictionary in
+        //ChatsModel().dumpAllChats(userID: userID!, completionHandler: {chatsDictionary in
             let chatsDictionaryArray = chatsDictionary as NSDictionary
             print("chatsDictionaryArray: \(chatsDictionaryArray))")
+            
             for chatDictionary in chatsDictionaryArray {
                 print("chatDictionary: \(chatsDictionaryArray))")
+                
                 if let chatValue = chatDictionary.value as? NSDictionary, let chatKey = chatDictionary.key as? AnyObject {
                     
                     let dataDict = [chatKey:chatValue] as NSMutableDictionary
                     self.chatsArray.append(dataDict)
+                    
+                    //listen for changes to last message
+                    ChatsModel().observeLastMessageChange(chatID: chatKey as! String, completionHandler: {changeInData in
+                        
+                        print("changeInData: \(changeInData)")
+                        let changeDictionaryArray = changeInData.allValues
+                        print("changeDictionaryArray: \(changeDictionaryArray)")
+                        let changeKey = changeInData.allKeys
+                        self.updateLastMessage(lastMessage: changeDictionaryArray[0] as! String, changeKey: changeKey[0] as! String,  chatID:  chatKey as! String )
+                    })
                 }
+                
             }
             print("self.chatsArray: \(self.chatsArray))")
             self.chatsTableList?.reloadData()
         })
     }
     
+    
+    //Update chat list with new message
+    func updateLastMessage(lastMessage: String, changeKey: String, chatID: String)  {
+        print("updateLastMessage: \(lastMessage)")
+        
+        for (index,chat) in chatsArray.enumerated() {
+            print("Item \(index): \(chat)")
+            
+            let rowDictionary = chat as! NSDictionary
+            let chatKey = rowDictionary.allKeys
+            
+            let messageValues = rowDictionary.allValues
+            let messageDictionary = messageValues[0] as! NSMutableDictionary
+            
+            if chatID == chatKey[0] as? String{
+                //change the dictionary
+                messageDictionary.removeObject(forKey: changeKey)
+                messageDictionary.setValue(lastMessage, forKey: changeKey)
+              
+                //create new dictionary
+                let newDict = [chatID:messageDictionary] as NSMutableDictionary
+                
+                //push new dictionary to the array
+                chatsArray[index] = newDict
+                
+                let indexPath = IndexPath(item: index, section: 0)
+                chatsTableList?.reloadRows(at: [indexPath], with: .top)
+                
+            }
+        }
+      
+    }
     
     // MARK :- UITableViewDelegate methods
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -114,9 +168,23 @@ class ChatsListViewController: UIViewController, UITableViewDelegate, UITableVie
         let rowDictionary = self.chatsArray[indexPath.row] as! NSMutableDictionary
         let chatID = rowDictionary.allKeys
         
+        //get selected msisdn
+        let messageValues = rowDictionary.allValues
+        let messageDictionary = messageValues[0] as! NSDictionary
+        let usersArray = (messageDictionary.value(forKey: "users") as? NSDictionary)?.allKeys as NSArray?
+        var recepient: String? = ""
+        
+        for msisdn in usersArray!{
+            if msisdn as? String != userID{
+                recepient = msisdn as? String
+            }
+        }
+        
+        print("recepient: ",recepient!)
+        
         let controller: ChatViewController = ChatViewController()
         //controller.selectedContactName = self.selectedContactName
-        //controller.selectedContactNumber = self.selectedContactNumber
+        controller.selectedContactNumber = recepient
         controller.selectedChatID = chatID[0] as? String
         self.navigationController?.pushViewController(controller, animated: true)
     }

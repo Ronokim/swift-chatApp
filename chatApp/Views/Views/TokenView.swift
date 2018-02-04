@@ -37,27 +37,28 @@ class TokenView: UIView {
         bodyContainerView.layer.cornerRadius = 4
         scrollView.addSubview(bodyContainerView)
         
-        let firstNameLabel : UILabel = UILabel(frame : CGRect(x : 5, y : 10, width : bodyContainerView.frame.size.width, height : 25))
-        firstNameLabel.text = "Enter authentication token received"
-        firstNameLabel.textColor = UIColor.formLabelsColor.defaultLabelColor
-        firstNameLabel.font = UIFont.boldSystemFont(ofSize: 16)
-        firstNameLabel.textAlignment = NSTextAlignment.left
-        bodyContainerView.addSubview(firstNameLabel)
+        let tokenLabel : UILabel = UILabel(frame : CGRect(x : 5, y : 10, width : bodyContainerView.frame.size.width, height : 25))
+        tokenLabel.text = "Enter authentication token received"
+        tokenLabel.textColor = UIColor.formLabelsColor.defaultLabelColor
+        tokenLabel.font = UIFont.boldSystemFont(ofSize: 16)
+        tokenLabel.textAlignment = NSTextAlignment.left
+        bodyContainerView.addSubview(tokenLabel)
         
-        let firstNameText : UITextField = UITextField(frame : CGRect(x : 5, y : firstNameLabel.frame.size.height + firstNameLabel.frame.origin.y + 10, width: bodyContainerView.frame.size.width - 10, height : 40))
-        firstNameText.placeholder = " Enter token"
-        firstNameText.backgroundColor = UIColor.clear
-        firstNameText.textColor = UIColor.black
-        firstNameText.layer.cornerRadius = 4
-        firstNameText.textAlignment = NSTextAlignment.left
-        firstNameText.tag = 1
-        firstNameText.layer.borderColor = UIColor.lightGray.cgColor
-        firstNameText.layer.borderWidth = 1
-        bodyContainerView.addSubview(firstNameText)
+        let tokenText : UITextField = UITextField(frame : CGRect(x : 5, y : tokenLabel.frame.size.height + tokenLabel.frame.origin.y + 10, width: bodyContainerView.frame.size.width - 10, height : 40))
+        tokenText.placeholder = " Enter token"
+        tokenText.backgroundColor = UIColor.clear
+        tokenText.textColor = UIColor.black
+        tokenText.layer.cornerRadius = 4
+        tokenText.textAlignment = NSTextAlignment.left
+        tokenText.tag = 1
+        tokenText.layer.borderColor = UIColor.lightGray.cgColor
+        tokenText.layer.borderWidth = 1
+        tokenText.keyboardType = .numberPad
+        bodyContainerView.addSubview(tokenText)
         
         
         
-        let saveButton : UIButton = UIButton(frame : CGRect(x : 0, y : firstNameText.frame.size.height + firstNameText.frame.origin.y + 15, width: bodyContainerView.frame.size.width, height : 40))
+        let saveButton : UIButton = UIButton(frame : CGRect(x : 0, y : tokenText.frame.size.height + tokenText.frame.origin.y + 15, width: bodyContainerView.frame.size.width, height : 40))
         saveButton.backgroundColor = UIColor.buttonColor.defaultButtonColor
         saveButton.setTitle("CONFIRM", for: UIControlState.normal)
         saveButton.setTitleColor(UIColor.white, for: UIControlState.normal)

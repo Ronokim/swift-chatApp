@@ -27,6 +27,7 @@ class MessagesModel{
     func createNewMessage(chatID: String, newChat: NSDictionary, completionHandler:@escaping (Bool) -> ()) {
         
         DBRef.addNewRecordWithAutoID(table: "messages/"+chatID, values: newChat, completionHandler: {response in
+            print("message insert res: \(response)")
             completionHandler(response)
         })
         

@@ -64,7 +64,7 @@ class ContactsTableViewController: UIViewController , UITableViewDelegate, UITab
         
     }
     
-    
+   
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -169,27 +169,22 @@ class ContactsTableViewController: UIViewController , UITableViewDelegate, UITab
             
             let userID = Auth.auth().currentUser?.phoneNumber
             print("UserID: \(String(describing: userID))")
+            print("self.selectedContactName: \(String(describing: self.selectedContactName))")
+            print("self.selectedContactNumber: \(String(describing: self.selectedContactNumber)))")
+            
             ChatsModel().checkIfChatExists(userID: userID!, recepientID: selectedContactNumber!, completionHandler: {(chatIDReturned) in
                 
-                //if !chatExists{
-                    //No chat between the two users. Create a new chat
+                //self.dismiss(animated: true, completion: {
+                    let controller: ChatViewController = ChatViewController()
+                    controller.selectedContactName = self.selectedContactName
+                    controller.selectedContactNumber = self.selectedContactNumber
+                    controller.selectedChatID = chatIDReturned
+                    self.navigationController?.pushViewController(controller, animated: true)
                     
-                    //ChatsModel().createNewChat(userID: userID!, recepientID: self.selectedContactNumber!, completionHandler: {newChat in
-                        let controller: ChatViewController = ChatViewController()
-                        controller.selectedContactName = self.selectedContactName
-                        controller.selectedContactNumber = self.selectedContactNumber
-                        controller.selectedChatID = chatIDReturned
-                        self.navigationController?.pushViewController(controller, animated: true)
-                    //})
-                    
-                //}
-                //else
-                //{
-                    //Chat between two users exists. Fetch messages instead
-               // }
+                //})
+                
+                
             })
-            
-            
             
         }
         

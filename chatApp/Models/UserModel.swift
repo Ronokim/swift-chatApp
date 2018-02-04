@@ -8,51 +8,18 @@
 
 import Foundation
 
-class UserModel: NSObject {
+class UserModel {
     
-    var _firstName: String = ""
-    var _lastName: String = ""
-    private var _email: String = ""
-    private var _msisdn: String = ""
+    var DBRef = FirebaseDBHandler.sharedInstance
     
-//    init(firstName: String) {
-//        self._firstName = firstName
-//    }
-//    
-    public var firstName: String {
-        get {
-            return self._firstName
-        }
-        set {
-            self._firstName = newValue
-        }
-    }
     
-    public var lastName: String {
-        get {
-            return self._lastName
-        }
-        set {
-            self._lastName = newValue
-        }
-    }
-    
-    public var email: String {
-        get {
-            return self._email
-        }
-        set {
-            self._email = newValue
-        }
-    }
-    
-    public var msisdn: String {
-        get {
-            return self._msisdn
-        }
-        set {
-            self._msisdn = newValue
-        }
+    func checkIfUserExists(msisdn: String, completionHandler:@escaping (NSDictionary) -> ()) {
+        
+        DBRef.fetchData(table: "users/"+msisdn, completionHandler: {responseDictionary in
+            print("responseDictionary\(responseDictionary)")
+            completionHandler(responseDictionary)
+        })
+        
     }
 }
 

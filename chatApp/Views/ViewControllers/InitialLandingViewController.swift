@@ -30,11 +30,7 @@ class InitialLandingViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         let pageView = InitialLandingView(frame: CGRect.zero)
         self.view = pageView
-      
-//        UserDefaults.standard.set("test", forKey: "senderNameTest")
-//        let user = UserModel()
-//        user.firstName = "fsd"
-//        print("Set user:\(user.firstName)")
+
     }
 
     override func didReceiveMemoryWarning() {

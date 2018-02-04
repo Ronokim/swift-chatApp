@@ -14,7 +14,6 @@
 		D245ED85201DEFAD003D8715 /* TokenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D245ED84201DEFAD003D8715 /* TokenViewController.swift */; };
 		D245ED87201E1AE1003D8715 /* ChatsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D245ED86201E1AE1003D8715 /* ChatsTableViewCell.swift */; };
 		D245ED8A201E2A48003D8715 /* FirebaseDBHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D245ED89201E2A48003D8715 /* FirebaseDBHandler.swift */; };
-		D245ED8C201E2EEB003D8715 /* UserObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = D245ED8B201E2EEB003D8715 /* UserObject.swift */; };
 		D24CFDA720209C620074316D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D24CFDA620209C610074316D /* GoogleService-Info.plist */; };
 		D24CFDA92020CB6D0074316D /* ContactsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D24CFDA82020CB6D0074316D /* ContactsTableViewCell.swift */; };
 		D24CFDAB2020CB960074316D /* ContactsTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D24CFDAA2020CB960074316D /* ContactsTableView.swift */; };
@@ -44,7 +43,6 @@
 		D245ED84201DEFAD003D8715 /* TokenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenViewController.swift; sourceTree = "<group>"; };
 		D245ED86201E1AE1003D8715 /* ChatsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsTableViewCell.swift; sourceTree = "<group>"; };
 		D245ED89201E2A48003D8715 /* FirebaseDBHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseDBHandler.swift; sourceTree = "<group>"; };
-		D245ED8B201E2EEB003D8715 /* UserObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserObject.swift; sourceTree = "<group>"; };
 		D24CFDA620209C610074316D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D24CFDA82020CB6D0074316D /* ContactsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsTableViewCell.swift; sourceTree = "<group>"; };
 		D24CFDAA2020CB960074316D /* ContactsTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsTableView.swift; sourceTree = "<group>"; };
@@ -153,7 +151,6 @@
 		D2AD3A1B201B2566002CDD9E /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				D245ED8B201E2EEB003D8715 /* UserObject.swift */,
 				D24CFDB0202103040074316D /* UserModel.swift */,
 				D2231277202246150027001C /* ChatsModel.swift */,
 				D22312792022730F0027001C /* MessagesModel.swift */,
@@ -343,7 +340,6 @@
 				D2AD3A2C201B278F002CDD9E /* LoginViewController.swift in Sources */,
 				D24CFDA92020CB6D0074316D /* ContactsTableViewCell.swift in Sources */,
 				D24CFDAF2020DAF20074316D /* ChatViewController.swift in Sources */,
-				D245ED8C201E2EEB003D8715 /* UserObject.swift in Sources */,
 				D2AD3A26201B2725002CDD9E /* ChatsListView.swift in Sources */,
 				D2AD3A2E201B279F002CDD9E /* ChatsListViewController.swift in Sources */,
 				D223127A2022730F0027001C /* MessagesModel.swift in Sources */,
