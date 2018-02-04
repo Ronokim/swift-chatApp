@@ -49,7 +49,6 @@ class ChatViewController: JSQMessagesViewController, JSQMessagesCollectionViewCe
         collectionView!.collectionViewLayout.incomingAvatarViewSize = CGSize.zero
         collectionView!.collectionViewLayout.outgoingAvatarViewSize = CGSize.zero
         
-        //self.observeMessages()
     }
     
     override func didReceiveMemoryWarning() {
@@ -66,7 +65,6 @@ class ChatViewController: JSQMessagesViewController, JSQMessagesCollectionViewCe
     private func observeMessages(){
         if(selectedChatID! != ""){
             MessagesModel().getAllMessages(chatID: selectedChatID!, completionHandler: {messageData in
-                print("UI :- messageData\(messageData)")
                 if let id = messageData["senderId"] as! String!, let name = messageData["senderName"] as! String!, let text = messageData["text"] as! String!, text.characters.count > 0 {
                     
                     self.addMessage(withId: id, name: name, text: text)
@@ -84,7 +82,6 @@ class ChatViewController: JSQMessagesViewController, JSQMessagesCollectionViewCe
     
     // MARK :- navigationBarButtons
     func manageNavigationBarItems(show: Bool) {
-        print("manageNavigationBarItems")
         if(show){
           
             let reply = UIBarButtonItem(barButtonSystemItem: .reply, target: self, action: #selector(replyTapped))
@@ -101,16 +98,14 @@ class ChatViewController: JSQMessagesViewController, JSQMessagesCollectionViewCe
     
     
     @objc func replyTapped()  {
-        print("replyTapped")
-        
+       
         let messageSelected = messages[(tappedCellIndexPath?.item)!]
         
         self.showMessagePrompt(messageToShow: messageSelected.text,buttonTitle: "Reply")
     }
     
     @objc func trashTapped()  {
-        print("trashTapped")
-        let messageSelected = messages[(tappedCellIndexPath?.item)!]
+         let messageSelected = messages[(tappedCellIndexPath?.item)!]
         
         self.showMessagePrompt(messageToShow: messageSelected.text,buttonTitle: "Delete")
     }
@@ -243,9 +238,6 @@ class ChatViewController: JSQMessagesViewController, JSQMessagesCollectionViewCe
     
     func messagesCollectionViewCellDidTap(_ cell: JSQMessagesCollectionViewCell!, atPosition position: CGPoint) {
         print("messagesCollectionViewCellDidTap")
-        
-        //let message = messages[indexPath.item]
-        
     }
     
     func messagesCollectionViewCell(_ cell: JSQMessagesCollectionViewCell!, didPerformAction action: Selector!, withSender sender: Any!) {

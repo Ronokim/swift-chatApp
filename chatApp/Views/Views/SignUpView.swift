@@ -62,6 +62,8 @@ class SignUpView: UIView {
         firstNameText.tag = 1
         firstNameText.layer.borderColor = UIColor.lightGray.cgColor
         firstNameText.layer.borderWidth = 1
+        firstNameText.returnKeyType = UIReturnKeyType.done
+        firstNameText.delegate = viewController
         bodyContainerView.addSubview(firstNameText)
         
         
@@ -81,6 +83,8 @@ class SignUpView: UIView {
         lastNameText.tag = 2
         lastNameText.layer.borderColor = UIColor.lightGray.cgColor
         lastNameText.layer.borderWidth = 1
+        lastNameText.returnKeyType = UIReturnKeyType.done
+        lastNameText.delegate = viewController
         bodyContainerView.addSubview(lastNameText)
         
         
@@ -102,6 +106,8 @@ class SignUpView: UIView {
         msisdnText.layer.borderColor = UIColor.lightGray.cgColor
         msisdnText.layer.borderWidth = 1
         msisdnText.text = "+254"
+        msisdnText.returnKeyType = UIReturnKeyType.done
+        msisdnText.delegate = viewController
         bodyContainerView.addSubview(msisdnText)
         
         
@@ -122,6 +128,8 @@ class SignUpView: UIView {
         emailNameText.tag = 3
         emailNameText.layer.borderColor = UIColor.lightGray.cgColor
         emailNameText.layer.borderWidth = 1
+        emailNameText.returnKeyType = UIReturnKeyType.done
+        emailNameText.delegate = viewController
         bodyContainerView.addSubview(emailNameText)
         
         

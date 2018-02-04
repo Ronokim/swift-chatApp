@@ -48,10 +48,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         passwordText = self.view.viewWithTag(4) as! UITextField?
         confirmPasswordText = self.view.viewWithTag(5) as! UITextField?
         msisdnText = self.view.viewWithTag(7) as! UITextField?
-        
-        //registerButtonRef = self.view.viewWithTag(6) as! UIButton?
-        //registerButtonRef!.addTarget(self, action:#selector(buttonListener(sender:)), for: UIControlEvents.touchUpInside)
-        
+       
         tapper = UITapGestureRecognizer(target: self, action: #selector(handleSingleTap(sender:)))
         tapper?.cancelsTouchesInView = false
         self.view.addGestureRecognizer(tapper!)
@@ -98,8 +95,6 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
             let firtNameString = firstNameText?.text
             let emailString = emailText?.text
             let msisdnString = msisdnText?.text
-            let passwordString = passwordText?.text
-            let confirmPasswordString = confirmPasswordText?.text
             
             if(firtNameString?.isEmpty)!{
                 

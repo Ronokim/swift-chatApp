@@ -51,17 +51,13 @@ class ChatsModel{
             else {
                 var chatID: String = ""
                 let chatsDictionaryArray = responseDictionary.allValues
-                //print("chatsDictionaryArray: \(chatsDictionaryArray))")
-                for (key,value) in chatsDictionaryArray[0] as! NSDictionary{
+                 for (key,value) in chatsDictionaryArray[0] as! NSDictionary{
                     let valueDict = value as! NSDictionary
-                    //print("valueDict: \(valueDict)")
                     let usersArray = (valueDict["users"] as! NSDictionary).allKeys as NSArray
-                    print("usersArray: \(usersArray)")
                     
                     if usersArray.contains(recepientID)
                     {
-                        print("chat exists for key: \(key)")
-                        chatID = key as! String
+                         chatID = key as! String
                     }
                     else
                     {

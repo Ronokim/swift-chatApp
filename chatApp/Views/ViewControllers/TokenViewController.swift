@@ -102,7 +102,7 @@ class TokenViewController: UIViewController, UITextFieldDelegate {
             }
             else
             {
-               
+                
                 let credential = PhoneAuthProvider.provider().credential(
                     withVerificationID: verificationID!,
                     verificationCode: verificationCode!)

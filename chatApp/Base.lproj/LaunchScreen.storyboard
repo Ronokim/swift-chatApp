@@ -17,12 +17,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="XIb-Si-mue">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="XIb-Si-mue">
                                 <rect key="frame" x="59" y="204" width="257" height="259"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="XIb-Si-mue" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="6gi-hq-3rV"/>
+                            <constraint firstItem="XIb-Si-mue" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="184" id="bVG-a4-fMl"/>
+                            <constraint firstItem="XIb-Si-mue" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="59" id="kKt-vb-dor"/>
+                            <constraint firstItem="XIb-Si-mue" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="wAI-F9-Oma"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                 </viewController>

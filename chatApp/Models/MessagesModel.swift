@@ -13,11 +13,6 @@ class MessagesModel{
    
     func getAllMessages(chatID: String, completionHandler:@escaping (NSDictionary) -> ()) {
         
-//        DBRef.fetchQueryData(table: "messages", column: chatID, values: chatID, completionHandler: {(responseDictionary) in
-//
-//            completionHandler(responseDictionary)
-//        })
-        
         DBRef.ObserveData(table: "messages", column: chatID, values: chatID, completionHandler: {(responseDictionary) in completionHandler(responseDictionary)
         })
         

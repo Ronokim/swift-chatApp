@@ -9,8 +9,13 @@
 import UIKit
 import FirebaseAuth
 
+protocol dismissContactsListDelegate {
+    func dismissContactsListShowChatView(contactName: String, contactNumber: String)
+}
+
 class ContactsTableViewController: UIViewController , UITableViewDelegate, UITableViewDataSource {
     
+    var delegate: dismissContactsListDelegate? = nil
     var customView: ContactsTableView? = nil
     var cellIdendifier: String = "EventCell"
     var arrayList: [Dictionary<String, String>] = []
@@ -72,15 +77,7 @@ class ContactsTableViewController: UIViewController , UITableViewDelegate, UITab
     
     
     func setToolBarButtons()  {
-        let doneButton: UIButton = UIButton(frame: CGRect(x : 0, y : 5, width : 70, height : 30))
-        doneButton.tag = 99
-        doneButton.backgroundColor = UIColor.clear
-        doneButton.setTitle("Chat", for: UIControlState.normal)
-        doneButton.setTitleColor(UIColor.backGroundColor.themeColor, for: UIControlState.normal)
-        doneButton.titleLabel?.font = UIFont.systemFont(ofSize: 18)
-        doneButton.titleLabel?.textAlignment = NSTextAlignment.right
-        doneButton.addTarget(self, action:#selector(buttonListener(sender:)), for: UIControlEvents.touchUpInside)
-        
+       
         let cancelButton: UIButton = UIButton(frame: CGRect(x : 1, y : 5, width : 70, height : 30))
         cancelButton.tag = 100
         cancelButton.backgroundColor = UIColor.clear
@@ -89,10 +86,6 @@ class ContactsTableViewController: UIViewController , UITableViewDelegate, UITab
         cancelButton.titleLabel?.font = UIFont.systemFont(ofSize: 18)
         cancelButton.titleLabel?.textAlignment = NSTextAlignment.left
         cancelButton.addTarget(self, action:#selector(buttonListener(sender:)), for: UIControlEvents.touchUpInside)
-        
-        let testUIBarButtonItem = UIBarButtonItem()
-        testUIBarButtonItem.customView = doneButton
-        self.navigationItem.rightBarButtonItem  = testUIBarButtonItem
         
         let leftUIBarButtonItem = UIBarButtonItem()
         leftUIBarButtonItem.customView = cancelButton
@@ -105,15 +98,14 @@ class ContactsTableViewController: UIViewController , UITableViewDelegate, UITab
         FirebaseDBHandler.sharedInstance.fetchData(table: "users", completionHandler: {responseDictionary in
             
             self.contactsArray = responseDictionary.allKeys as! [String]
-            print("contactsArray: \(self.contactsArray)")
             self.contactsNameArray = responseDictionary.allValues as! [Dictionary<String, String>]
-            print("contactsNameArray: \(self.contactsNameArray)")
-            
             
             self.contactsTable?.reloadData()
         })
     }
     
+    
+    //MARK :- UITableView delegate methods
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return rowHeight
     }
@@ -123,13 +115,19 @@ class ContactsTableViewController: UIViewController , UITableViewDelegate, UITab
         
         selectedContactNumber = self.contactsNameArray[indexPath.row]["phoneNumber"]
         selectedContactName = self.contactsNameArray[indexPath.row]["firstName"]! + " " + self.contactsNameArray[indexPath.row]["lastName"]!
-        print("selectedFilter: \(String(describing: selectedContactNumber))")
+        
+        if(self.delegate != nil){
+            dismissContactsListShowChatView(contactName: selectedContactName!, contactNumber: selectedContactName!)
+        }
+        else{
+            print("delegate is nil")
+        }
         
     }
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("row count: \(self.contactsNameArray.count)")
+       
         return self.contactsNameArray.count
     }
     
@@ -138,7 +136,7 @@ class ContactsTableViewController: UIViewController , UITableViewDelegate, UITab
         
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdendifier, for: indexPath as IndexPath) as! ContactsTableViewCell
         
-        let rowDictionary = self.contactsNameArray[indexPath.row] //self.arrayList[indexPath.row]
+        let rowDictionary = self.contactsNameArray[indexPath.row]
         let contactName = rowDictionary["firstName"]! + " " + rowDictionary["lastName"]!
         let contactMsisdn = rowDictionary["phoneNumber"]
         
@@ -160,33 +158,10 @@ class ContactsTableViewController: UIViewController , UITableViewDelegate, UITab
     }
     
     
+    // MARK :- UIButton action method
     @objc func buttonListener(sender:UIButton) {
         
         let btnsendtag: UIButton = sender
-        
-        //chat button selected
-        if btnsendtag.tag == 99 {
-            
-            let userID = Auth.auth().currentUser?.phoneNumber
-            print("UserID: \(String(describing: userID))")
-            print("self.selectedContactName: \(String(describing: self.selectedContactName))")
-            print("self.selectedContactNumber: \(String(describing: self.selectedContactNumber)))")
-            
-            ChatsModel().checkIfChatExists(userID: userID!, recepientID: selectedContactNumber!, completionHandler: {(chatIDReturned) in
-                
-                //self.dismiss(animated: true, completion: {
-                    let controller: ChatViewController = ChatViewController()
-                    controller.selectedContactName = self.selectedContactName
-                    controller.selectedContactNumber = self.selectedContactNumber
-                    controller.selectedChatID = chatIDReturned
-                    self.navigationController?.pushViewController(controller, animated: true)
-                    
-                //})
-                
-                
-            })
-            
-        }
         
         //cancel button selected
         if btnsendtag.tag == 100 {
@@ -195,4 +170,9 @@ class ContactsTableViewController: UIViewController , UITableViewDelegate, UITab
         }
     }
     
+    
+    func dismissContactsListShowChatView(contactName: String, contactNumber: String){
+        delegate?.dismissContactsListShowChatView(contactName: selectedContactName!, contactNumber: selectedContactNumber!)
+        dismiss(animated: true, completion: nil)
+    }
 }

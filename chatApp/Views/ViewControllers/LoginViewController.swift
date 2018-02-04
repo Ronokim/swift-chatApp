@@ -42,10 +42,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         tapper?.cancelsTouchesInView = false
         self.view.addGestureRecognizer(tapper!)
         
-        
-        //        let user = UserModel()
-        //        let storedUser = UserDefaults.standard.string(forKey: "senderNameTest")
-        //        print("Read user:\(storedUser ?? "Failed to get stored user")")
     }
     
     override func didReceiveMemoryWarning() {
@@ -83,7 +79,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         let btnsendtag: UIButton = sender
         
         if btnsendtag.tag == 2 {
-            // login Button clicked
+            //  MARK: - login Button clicked
             let phoneString = phoneNumberText?.text
             
             if(phoneString?.isEmpty)!
@@ -99,7 +95,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 UserModel().checkIfUserExists(msisdn: phoneString!, completionHandler: {responseDictionary in
                     print("responseDictionary2: \(responseDictionary)")
                     if let responseMsisdn = responseDictionary["phoneNumber"]{
-                        //user already registered. Authenticate phone number
+                        //  MARK: - user already registered. Authenticate phone number
                         print("user exists")
                         
                         let userName = (responseDictionary["firstName"] as! String)+" "+(responseDictionary["lastName"] as! String)
@@ -109,11 +105,10 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                                 self.showMessagePrompt(messageToShow: error.localizedDescription)
                                 return
                             }
-                            // Sign in using the verificationID and the code sent to the user
+                            //  MARK: - Sign in using the verificationID and the code sent to the user
                             UserDefaults.standard.set(verificationID, forKey: "authVerificationID")
                             UserDefaults.standard.set(userName, forKey: "senderName")
                             
-                            print("user verificationID: \(String(describing: verificationID))")
                             let controller: TokenViewController = TokenViewController()
                             controller.authenticationType = "Login"
                             controller.phoneNumber = responseMsisdn as! String
@@ -122,8 +117,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                         }
                     }
                     else{
-                        //user is not registered. Go to registration view
-                        print("new user")
+                        //  MARK: - user is not registered. Go to registration view
                         let controller: SignUpViewController = SignUpViewController()
                         self.navigationController?.pushViewController(controller, animated: true)
                     }
